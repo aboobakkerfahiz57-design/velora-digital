@@ -3,17 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05020b">
+<meta name="description" content="VELORA DIGITAL — Digital Presence. Elevated.">
 <title>VELORA DIGITAL — Digital Presence. Elevated.</title>
 
 <style>
 :root{
   --bg:#030208;
-  --purple:#8b2cff;
-  --violet:#c45cff;
-  --white:#f7f4ff;
+  --bg2:#07030e;
+  --panel:rgba(13,8,24,.72);
+  --panel2:rgba(23,12,39,.78);
+  --purple:#7b20ff;
+  --violet:#b54cff;
+  --electric:#d277ff;
+  --white:#f7f2ff;
   --muted:#a8a0b5;
-  --glass:rgba(255,255,255,.045);
-  --border:rgba(190,105,255,.22);
+  --muted2:#766d82;
+  --line:rgba(184,89,255,.2);
+  --line2:rgba(255,255,255,.08);
+  --shadow:0 30px 100px rgba(0,0,0,.55);
+  --glow:0 0 50px rgba(139,40,255,.28);
 }
 
 *{
@@ -33,85 +42,221 @@ body{
   overflow-x:hidden;
 }
 
+body.modal-open{
+  overflow:hidden;
+}
+
 a{
   color:inherit;
   text-decoration:none;
 }
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+button{
+  font:inherit;
+}
+
+img{
+  max-width:100%;
+}
+
+::selection{
+  background:#8b2cff;
+  color:white;
+}
+
+/* =========================
+   GLOBAL 3D BACKGROUND
+========================= */
+
+.page-glow{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-20;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(120,20,255,.13),transparent 25%),
+    radial-gradient(circle at 85% 25%,rgba(170,50,255,.10),transparent 25%),
+    radial-gradient(circle at 50% 80%,rgba(95,20,220,.10),transparent 28%);
+}
+
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+.grid-floor{
+  position:absolute;
+  left:-20%;
+  right:-20%;
+  bottom:-10%;
+  height:55%;
+  opacity:.25;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(145,53,255,.12) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(145,53,255,.12) 1px,transparent 1px);
+  background-size:70px 70px;
+  transform:
+    perspective(600px)
+    rotateX(67deg);
+  transform-origin:center bottom;
+  mask-image:linear-gradient(to bottom,transparent,black 25%,black 75%,transparent);
+}
+
+.floating-orb{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#c65cff;
+  box-shadow:
+    0 0 10px #c65cff,
+    0 0 30px #8b2cff;
+  animation:orbFloat 5s ease-in-out infinite;
+}
+
+@keyframes orbFloat{
+  50%{
+    transform:translate3d(0,-25px,0);
+    opacity:.5;
+  }
+}
+
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar{
   position:fixed;
   top:0;
   left:0;
   width:100%;
-  height:78px;
-  z-index:1000;
+  height:76px;
+  z-index:5000;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
 
-  padding:0 6vw;
+  padding:0 5vw;
 
-  background:rgba(3,2,8,.55);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  background:rgba(3,2,8,.58);
+  border-bottom:1px solid rgba(255,255,255,.06);
 
-  border-bottom:1px solid rgba(255,255,255,.07);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+
+  transition:.35s;
 }
 
-.logo{
+.navbar.scrolled{
+  background:rgba(3,2,8,.88);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+
+.brand{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:12px;
 }
 
-.logo img{
-  width:47px;
-  height:47px;
-  object-fit:contain;
+.brand img{
+  width:45px;
+  height:45px;
   border-radius:50%;
+  object-fit:cover;
+  box-shadow:
+    0 0 18px rgba(144,40,255,.45);
 }
 
-.logo-text{
-  font-size:14px;
+.brand-name{
+  font-size:13px;
   font-weight:800;
-  letter-spacing:.22em;
+  letter-spacing:.24em;
+}
+
+.brand-name span{
+  display:block;
+  margin-top:3px;
+  color:#ad3cff;
+  font-size:9px;
+  letter-spacing:.38em;
 }
 
 .nav-links{
   display:flex;
-  gap:34px;
+  align-items:center;
+  gap:30px;
   list-style:none;
 }
 
 .nav-links a{
-  font-size:12px;
+  position:relative;
+  color:#bdb4c9;
+  font-size:11px;
   letter-spacing:.12em;
-  color:#c9c1d4;
+  text-transform:uppercase;
   transition:.3s;
 }
 
-.nav-links a:hover{
-  color:#c66aff;
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width:0;
+  height:2px;
+  transform:translateX(-50%);
+  background:#a83cff;
+  box-shadow:0 0 10px #a83cff;
+  transition:.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:#fff;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after{
+  width:22px;
+}
+
+.nav-cta{
+  padding:11px 18px;
+  border:1px solid rgba(180,70,255,.5);
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(117,30,255,.28),rgba(40,10,75,.35));
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.05em;
+  box-shadow:0 0 25px rgba(128,30,255,.13);
+  transition:.3s;
+}
+
+.nav-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 30px rgba(151,44,255,.35);
 }
 
 .menu{
   display:none;
-  border:1px solid var(--border);
+  border:1px solid var(--line);
   background:rgba(255,255,255,.04);
   color:white;
-  padding:10px 13px;
-  border-radius:12px;
+  padding:9px 12px;
+  border-radius:11px;
   cursor:pointer;
 }
 
-/* =========================================================
+/* =========================
    HERO
-========================================================= */
+========================= */
 
 .hero{
   min-height:100vh;
@@ -120,142 +265,78 @@ a{
   align-items:center;
   overflow:hidden;
   isolation:isolate;
+  padding-top:76px;
 }
 
-.hero-background{
+.hero-bg{
   position:absolute;
   inset:0;
-  z-index:-5;
-
+  z-index:-8;
   background:
     linear-gradient(
       90deg,
-      rgba(3,2,8,.92) 0%,
-      rgba(3,2,8,.62) 40%,
-      rgba(3,2,8,.28) 70%,
-      rgba(3,2,8,.82) 100%
+      rgba(3,2,8,.96) 0%,
+      rgba(3,2,8,.78) 35%,
+      rgba(3,2,8,.20) 70%,
+      rgba(3,2,8,.75) 100%
     ),
-    url("YOUR_BACKGROUND_FILE_NAME_HERE");
-
-  background-size:cover;
-  background-position:center;
+    url("velora-hero-v.jpg") center/cover no-repeat;
   transform:scale(1.04);
-  animation:backgroundMove 15s ease-in-out infinite alternate;
+  animation:heroZoom 16s ease-in-out infinite alternate;
 }
 
-@keyframes backgroundMove{
-  from{
-    transform:scale(1.04);
-  }
+@keyframes heroZoom{
   to{
-    transform:scale(1.1);
+    transform:scale(1.10);
   }
 }
 
-.hero::after{
-  content:"";
+.hero-overlay{
   position:absolute;
   inset:0;
-  z-index:-4;
-
+  z-index:-7;
   background:
-    radial-gradient(
-      circle at 72% 45%,
-      rgba(142,39,255,.28),
-      transparent 30%
-    ),
-    linear-gradient(
-      to bottom,
-      transparent 70%,
-      var(--bg) 100%
-    );
-}
-
-#particles{
-  position:absolute;
-  inset:0;
-  z-index:-2;
-  pointer-events:none;
-}
-
-.hero-grid{
-  position:absolute;
-  inset:0;
-  z-index:-3;
-
-  background-image:
-    linear-gradient(rgba(159,70,255,.07) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(159,70,255,.07) 1px,transparent 1px);
-
-  background-size:70px 70px;
-
-  mask-image:linear-gradient(
-    to bottom,
-    transparent,
-    black 20%,
-    black 70%,
-    transparent
-  );
-
-  transform:perspective(600px) rotateX(62deg) scale(1.8);
-  transform-origin:center bottom;
-
-  opacity:.35;
+    radial-gradient(circle at 70% 48%,rgba(139,40,255,.28),transparent 31%),
+    linear-gradient(to bottom,transparent 65%,var(--bg) 100%);
 }
 
 .hero-container{
-  width:min(1250px,90%);
+  width:min(1280px,90%);
   margin:auto;
 
   display:grid;
   grid-template-columns:1fr 1fr;
-  align-items:center;
-
   gap:30px;
-  padding-top:80px;
+  align-items:center;
 }
-
-/* =========================================================
-   HERO TEXT
-========================================================= */
 
 .hero-copy{
   position:relative;
   z-index:5;
 }
 
-.badge{
+.kicker{
   display:inline-flex;
   align-items:center;
   gap:9px;
-
-  padding:9px 14px;
-  border:1px solid var(--border);
+  padding:8px 13px;
+  border:1px solid var(--line);
   border-radius:100px;
-
-  background:rgba(10,6,20,.6);
-  backdrop-filter:blur(10px);
-
-  color:#d8cfe2;
-
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.18em;
+  background:rgba(10,5,20,.55);
+  backdrop-filter:blur(12px);
+  color:#d9cde6;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.2em;
   text-transform:uppercase;
-
-  margin-bottom:24px;
 }
 
-.badge-dot{
-  width:7px;
-  height:7px;
+.kicker-dot{
+  width:6px;
+  height:6px;
   border-radius:50%;
-
-  background:#b44cff;
-  box-shadow:
-    0 0 10px #9b31ff,
-    0 0 25px #9b31ff;
-
+  background:#c05cff;
+  box-shadow:0 0 15px #a22cff;
   animation:pulse 1.8s infinite;
 }
 
@@ -267,357 +348,253 @@ a{
 }
 
 .hero-title{
-  font-size:clamp(54px,7vw,105px);
+  margin-top:25px;
+  font-size:clamp(52px,7vw,100px);
   line-height:.88;
   letter-spacing:-.065em;
-  font-weight:850;
+  font-weight:900;
 }
 
 .gradient{
-  background:linear-gradient(
-    100deg,
-    #ffffff 10%,
-    #e4c8ff 42%,
-    #a63cff 85%
-  );
-
+  background:linear-gradient(100deg,#fff 5%,#e7ceff 40%,#a23cff 90%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
 }
 
 .hero-description{
-  max-width:590px;
-  margin-top:27px;
-
-  color:#b7afc3;
-  font-size:17px;
+  max-width:580px;
+  margin-top:26px;
+  color:#b7adbf;
+  font-size:16px;
   line-height:1.75;
 }
 
 .hero-buttons{
   display:flex;
   flex-wrap:wrap;
-  gap:13px;
-  margin-top:32px;
+  gap:12px;
+  margin-top:31px;
 }
 
 .btn{
-  min-height:50px;
-  padding:0 22px;
-
+  min-height:51px;
+  padding:0 21px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
-  border-radius:14px;
-
-  font-size:12px;
-  font-weight:750;
-  letter-spacing:.04em;
-
+  gap:9px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.05em;
   cursor:pointer;
   transition:.3s;
-
-  border:1px solid var(--border);
 }
 
 .btn-primary{
-  background:linear-gradient(
-    135deg,
-    #7c21ff,
-    #bb4cff
-  );
-
-  box-shadow:
-    0 0 30px rgba(139,45,255,.3);
+  color:#fff;
+  background:linear-gradient(135deg,#7620ff,#b84cff);
+  box-shadow:0 0 30px rgba(129,33,255,.28);
 }
 
 .btn-primary:hover{
-  transform:translateY(-3px);
-  box-shadow:
-    0 0 45px rgba(139,45,255,.55);
+  transform:translateY(-4px);
+  box-shadow:0 0 45px rgba(151,43,255,.5);
 }
 
 .btn-secondary{
+  color:#e7dff0;
   background:rgba(255,255,255,.045);
 }
 
 .btn-secondary:hover{
   background:rgba(255,255,255,.09);
-  transform:translateY(-3px);
+  transform:translateY(-4px);
 }
 
-/* =========================================================
-   3D LOGO EXPERIENCE
-========================================================= */
+/* =========================
+   HERO 3D SCENE
+========================= */
 
 .scene{
   height:620px;
-
   position:relative;
-
   display:flex;
   align-items:center;
   justify-content:center;
+  perspective:1500px;
+}
 
-  perspective:1400px;
+.scene::before{
+  content:"";
+  position:absolute;
+  width:450px;
+  height:450px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(137,36,255,.20),transparent 67%);
+  filter:blur(15px);
 }
 
 .orbit{
   position:absolute;
-
-  width:520px;
-  height:520px;
-
+  width:510px;
+  height:510px;
   border-radius:50%;
-
-  border:1px solid rgba(190,90,255,.25);
-
+  border:1px solid rgba(193,91,255,.25);
   box-shadow:
-    0 0 70px rgba(126,24,255,.15),
-    inset 0 0 50px rgba(126,24,255,.08);
-
+    0 0 70px rgba(115,26,255,.16),
+    inset 0 0 50px rgba(115,26,255,.08);
   transform-style:preserve-3d;
-
-  animation:orbitRotate 20s linear infinite;
+  animation:orbitRotate 18s linear infinite;
 }
 
 .orbit::before,
 .orbit::after{
   content:"";
-
   position:absolute;
   inset:8%;
-
   border-radius:50%;
-
-  border:1px dashed rgba(210,157,255,.18);
+  border:1px dashed rgba(211,155,255,.17);
 }
 
 .orbit::after{
-  inset:20%;
+  inset:21%;
   border-style:solid;
-  border-color:rgba(255,255,255,.07);
-
-  animation:orbitReverse 13s linear infinite;
+  border-color:rgba(255,255,255,.06);
+  animation:orbitReverse 11s linear infinite;
 }
 
 @keyframes orbitRotate{
-  from{
-    transform:rotateX(67deg) rotateZ(0deg);
-  }
-  to{
-    transform:rotateX(67deg) rotateZ(360deg);
-  }
+  from{transform:rotateX(68deg) rotateZ(0deg);}
+  to{transform:rotateX(68deg) rotateZ(360deg);}
 }
 
 @keyframes orbitReverse{
-  from{
-    transform:rotateZ(0deg);
-  }
-  to{
-    transform:rotateZ(-360deg);
-  }
-}
-
-.logo-3d{
-  width:min(390px,72vw);
-  aspect-ratio:1;
-
-  position:relative;
-
-  border-radius:50%;
-
-  transform-style:preserve-3d;
-
-  transition:
-    transform .15s ease-out;
-
-  box-shadow:
-    0 0 40px rgba(140,36,255,.55),
-    0 0 100px rgba(110,25,255,.3),
-    0 30px 80px rgba(0,0,0,.6);
-
-  animation:
-    logoFloat 5s ease-in-out infinite;
-}
-
-.logo-3d::before{
-  content:"";
-
-  position:absolute;
-  inset:-12px;
-
-  border-radius:50%;
-
-  border:1px solid rgba(185,82,255,.55);
-
-  box-shadow:
-    0 0 30px rgba(145,36,255,.45);
-
-  animation:ringPulse 3s ease-in-out infinite;
-}
-
-.logo-3d::after{
-  content:"";
-
-  position:absolute;
-  inset:-30px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(150,40,255,.18),
-      transparent 67%
-    );
-
-  filter:blur(10px);
-
-  z-index:-1;
-}
-
-.logo-3d img{
-  width:100%;
-  height:100%;
-
-  display:block;
-
-  object-fit:cover;
-
-  border-radius:50%;
-
-  position:relative;
-  z-index:2;
-}
-
-@keyframes logoFloat{
-  0%,100%{
-    transform:translateY(0) rotateZ(0deg);
-  }
-
-  50%{
-    transform:translateY(-18px) rotateZ(.7deg);
-  }
-}
-
-@keyframes ringPulse{
-  50%{
-    opacity:.45;
-    transform:scale(1.025);
-  }
-}
-
-.scan-line{
-  position:absolute;
-
-  left:10%;
-  right:10%;
-
-  height:1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #d277ff,
-      transparent
-    );
-
-  box-shadow:0 0 18px #a33cff;
-
-  z-index:5;
-
-  animation:scan 4s ease-in-out infinite;
-}
-
-@keyframes scan{
-  0%,100%{
-    top:18%;
-    opacity:0;
-  }
-
-  20%{
-    opacity:1;
-  }
-
-  50%{
-    top:82%;
-    opacity:.7;
-  }
-
-  80%{
-    opacity:1;
-  }
+  from{transform:rotateZ(0deg);}
+  to{transform:rotateZ(-360deg);}
 }
 
 .orbit-point{
   position:absolute;
-
-  width:10px;
-  height:10px;
-
+  width:9px;
+  height:9px;
   border-radius:50%;
-
-  background:#c45cff;
-
-  box-shadow:
-    0 0 10px #a32cff,
-    0 0 25px #8b22ff;
+  background:#c65cff;
+  box-shadow:0 0 10px #b63cff,0 0 30px #8b22ff;
 }
 
-/* =========================================================
-   SCROLL INDICATOR
-========================================================= */
+.orbit-point.one{top:10%;left:48%}
+.orbit-point.two{right:7%;top:46%}
+.orbit-point.three{bottom:10%;left:46%}
+.orbit-point.four{left:7%;top:46%}
+
+.logo-stage{
+  position:relative;
+  width:min(390px,70vw);
+  aspect-ratio:1;
+  transform-style:preserve-3d;
+  transition:transform .15s ease-out;
+  animation:logoFloat 5s ease-in-out infinite;
+}
+
+.logo-stage::before{
+  content:"";
+  position:absolute;
+  inset:-12px;
+  border-radius:50%;
+  border:1px solid rgba(187,77,255,.58);
+  box-shadow:
+    0 0 30px rgba(145,36,255,.42),
+    inset 0 0 30px rgba(145,36,255,.12);
+  animation:ringPulse 3s ease-in-out infinite;
+}
+
+.logo-stage::after{
+  content:"";
+  position:absolute;
+  inset:-40px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(143,38,255,.18),transparent 67%);
+  filter:blur(12px);
+  z-index:-2;
+}
+
+.logo-stage img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:50%;
+  box-shadow:
+    0 0 45px rgba(140,35,255,.48),
+    0 30px 80px rgba(0,0,0,.65);
+}
+
+.scan-line{
+  position:absolute;
+  left:9%;
+  right:9%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#d277ff,transparent);
+  box-shadow:0 0 18px #a33cff;
+  z-index:4;
+  animation:scan 4s ease-in-out infinite;
+}
+
+@keyframes scan{
+  0%,100%{top:16%;opacity:0}
+  20%{opacity:1}
+  50%{top:84%;opacity:.7}
+  80%{opacity:1}
+}
+
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0) rotateZ(0deg)}
+  50%{transform:translateY(-16px) rotateZ(.7deg)}
+}
+
+@keyframes ringPulse{
+  50%{opacity:.45;transform:scale(1.025)}
+}
 
 .scroll-indicator{
   position:absolute;
-  bottom:30px;
+  bottom:27px;
   left:50%;
-
   transform:translateX(-50%);
-
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:8px;
-
-  color:#80778c;
-
-  font-size:9px;
+  color:#777080;
+  font-size:8px;
   letter-spacing:.25em;
   text-transform:uppercase;
 }
 
 .scroll-line{
   width:1px;
-  height:40px;
-
-  background:linear-gradient(
-    to bottom,
-    #b34cff,
-    transparent
-  );
-
+  height:38px;
+  background:linear-gradient(to bottom,#b34cff,transparent);
   animation:scrollLine 2s infinite;
 }
 
 @keyframes scrollLine{
   50%{
     transform:translateY(9px);
-    opacity:.4;
+    opacity:.35;
   }
 }
 
-/* =========================================================
-   SERVICES
-========================================================= */
+/* =========================
+   SECTION SYSTEM
+========================= */
 
 section{
   position:relative;
-  padding:120px 6vw;
+  padding:125px 6vw;
 }
 
 .section-container{
@@ -625,35 +602,41 @@ section{
   margin:auto;
 }
 
+.section-head{
+  position:relative;
+  z-index:2;
+}
+
 .section-kicker{
-  color:#b34cff;
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.22em;
+  color:#ad3cff;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.25em;
   text-transform:uppercase;
-  margin-bottom:14px;
 }
 
 .section-title{
-  font-size:clamp(38px,5vw,70px);
+  margin-top:13px;
+  font-size:clamp(39px,5vw,69px);
   line-height:1;
   letter-spacing:-.055em;
+  font-weight:850;
 }
 
 .section-description{
-  max-width:650px;
-  color:var(--muted);
-  line-height:1.75;
+  max-width:670px;
   margin-top:18px;
+  color:var(--muted);
+  line-height:1.8;
 }
+
+/* =========================
+   SERVICES
+========================= */
 
 .services{
   background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(117,30,220,.12),
-      transparent 35%
-    ),
+    radial-gradient(circle at 50% 0%,rgba(116,29,220,.12),transparent 34%),
     #05030a;
 }
 
@@ -666,396 +649,773 @@ section{
 
 .service-card{
   position:relative;
-  min-height:250px;
-
-  padding:28px;
-
+  min-height:310px;
+  padding:18px;
   overflow:hidden;
-
-  border:1px solid rgba(190,100,255,.13);
-  border-radius:22px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(30,17,50,.72),
-      rgba(8,5,14,.75)
-    );
-
-  transition:.35s;
+  border:1px solid var(--line);
+  border-radius:23px;
+  background:linear-gradient(145deg,rgba(30,16,49,.78),rgba(7,4,13,.82));
+  cursor:pointer;
+  transform-style:preserve-3d;
+  transition:.4s;
 }
 
 .service-card:hover{
   transform:
-    perspective(700px)
-    rotateX(3deg)
-    rotateY(-3deg)
+    perspective(900px)
+    rotateX(4deg)
+    rotateY(-4deg)
     translateY(-8px);
-
-  border-color:rgba(191,91,255,.45);
-
+  border-color:rgba(192,83,255,.55);
   box-shadow:
-    0 25px 60px rgba(0,0,0,.35),
-    0 0 35px rgba(130,35,255,.1);
+    0 30px 70px rgba(0,0,0,.4),
+    0 0 35px rgba(130,35,255,.13);
 }
 
-.service-card::before{
-  content:"";
-
+.service-image{
   position:absolute;
+  inset:0;
+  opacity:.56;
+  transition:.45s;
+}
 
-  width:180px;
-  height:180px;
+.service-card:hover .service-image{
+  opacity:.86;
+  transform:scale(1.07);
+}
 
-  right:-70px;
-  top:-70px;
+.service-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(1.1) contrast(1.05);
+}
 
+.service-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
   background:
-    radial-gradient(
-      circle,
-      rgba(153,45,255,.25),
-      transparent 68%
-    );
+    linear-gradient(to top,rgba(4,2,8,.98) 3%,rgba(4,2,8,.55) 53%,rgba(4,2,8,.15));
+}
+
+.service-content{
+  position:absolute;
+  left:22px;
+  right:22px;
+  bottom:22px;
+  z-index:2;
+  transform:translateZ(35px);
 }
 
 .service-number{
-  color:#71677d;
-  font-size:11px;
-  letter-spacing:.15em;
-}
-
-.service-icon{
-  font-size:35px;
-  margin-top:28px;
+  color:#a23cff;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
 }
 
 .service-card h3{
-  margin-top:18px;
+  margin-top:8px;
   font-size:22px;
+  letter-spacing:-.035em;
 }
 
 .service-card p{
-  margin-top:10px;
-  color:#9d94a9;
-  font-size:13px;
-  line-height:1.65;
-}
-
-/* =========================================================
-   ABOUT
-========================================================= */
-
-.about{
-  background:#030208;
-}
-
-.about-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:80px;
-  align-items:center;
-}
-
-.about-visual{
-  min-height:450px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:1px solid rgba(190,100,255,.15);
-  border-radius:28px;
-
-  background:
-    radial-gradient(
-      circle at center,
-      rgba(127,34,255,.18),
-      transparent 55%
-    ),
-    rgba(255,255,255,.025);
-
-  overflow:hidden;
-}
-
-.about-v{
-  font-size:190px;
-  font-weight:900;
-  line-height:1;
-
-  color:transparent;
-
-  -webkit-text-stroke:1px rgba(194,107,255,.7);
-
-  text-shadow:
-    0 0 30px rgba(150,45,255,.3),
-    0 0 90px rgba(150,45,255,.18);
-
-  animation:vFloat 5s ease-in-out infinite;
-}
-
-@keyframes vFloat{
-  50%{
-    transform:
-      translateY(-15px)
-      rotateY(12deg);
-  }
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:35px;
-}
-
-.stat{
-  padding:20px;
-
-  border-radius:16px;
-
-  border:1px solid rgba(255,255,255,.08);
-
-  background:rgba(255,255,255,.025);
-}
-
-.stat strong{
-  font-size:27px;
-  display:block;
-}
-
-.stat span{
-  color:#847b90;
+  margin-top:7px;
+  color:#a49aac;
   font-size:11px;
+  line-height:1.6;
 }
 
-/* =========================================================
+.service-arrow{
+  position:absolute;
+  right:20px;
+  top:20px;
+  width:38px;
+  height:38px;
+  border:1px solid rgba(187,79,255,.4);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#d38aff;
+  z-index:3;
+  background:rgba(7,3,15,.55);
+  transition:.3s;
+}
+
+.service-card:hover .service-arrow{
+  transform:rotate(45deg);
+  background:#7d20ff;
+  color:white;
+}
+
+/* =========================
    WORK
-========================================================= */
+========================= */
 
 .work{
-  background:
-    linear-gradient(
-      180deg,
-      #08040f,
-      #030208
-    );
+  background:#030208;
 }
 
 .work-grid{
   display:grid;
-  grid-template-columns:1.3fr .7fr;
+  grid-template-columns:1.7fr .85fr .85fr;
+  grid-auto-rows:230px;
   gap:15px;
   margin-top:55px;
 }
 
-.project{
-  min-height:360px;
-
-  padding:30px;
-
-  border:1px solid rgba(190,100,255,.15);
-  border-radius:24px;
-
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-
+.work-card{
   position:relative;
   overflow:hidden;
-
-  background:
-    radial-gradient(
-      circle at 70% 25%,
-      rgba(145,38,255,.3),
-      transparent 35%
-    ),
-    linear-gradient(
-      145deg,
-      #1a1027,
-      #07040c
-    );
-
-  transition:.35s;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:#09050f;
+  cursor:pointer;
+  transform-style:preserve-3d;
+  transition:.4s;
 }
 
-.project:hover{
-  transform:translateY(-7px);
-  border-color:rgba(190,100,255,.4);
+.work-card:first-child{
+  grid-row:span 2;
 }
 
-.project::after{
+.work-card:hover{
+  transform:
+    perspective(900px)
+    rotateX(3deg)
+    rotateY(-3deg)
+    translateY(-6px);
+  border-color:rgba(193,84,255,.52);
+  box-shadow:
+    0 25px 65px rgba(0,0,0,.5),
+    0 0 40px rgba(130,35,255,.14);
+}
+
+.work-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.67;
+  transition:.55s;
+}
+
+.work-card:hover img{
+  transform:scale(1.08);
+  opacity:.92;
+}
+
+.work-card::after{
   content:"";
-
   position:absolute;
   inset:0;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(3,2,8,.95),
-      transparent 70%
-    );
+  background:linear-gradient(to top,rgba(3,2,8,.96),transparent 70%);
 }
 
-.project-content{
-  position:relative;
+.work-info{
+  position:absolute;
   z-index:2;
+  left:22px;
+  bottom:20px;
+  transform:translateZ(35px);
 }
 
-.project-label{
-  color:#b84cff;
-  font-size:10px;
+.work-info small{
+  color:#aa3cff;
+  font-size:8px;
   font-weight:800;
-  letter-spacing:.18em;
+  letter-spacing:.2em;
   text-transform:uppercase;
 }
 
-.project h3{
-  font-size:29px;
-  margin-top:8px;
+.work-info h3{
+  margin-top:7px;
+  font-size:20px;
 }
 
-.project p{
-  color:#aaa0b5;
-  font-size:13px;
-  margin-top:6px;
+.work-info p{
+  margin-top:5px;
+  color:#aaa1b4;
+  font-size:10px;
 }
 
-.project-stack{
-  display:grid;
-  gap:15px;
-}
+/* =========================
+   MINDSET
+========================= */
 
-.project-small{
-  min-height:172px;
-}
-
-/* =========================================================
-   CTA
-========================================================= */
-
-.cta{
-  padding-top:80px;
-  padding-bottom:120px;
-}
-
-.cta-box{
-  position:relative;
-  overflow:hidden;
-
-  text-align:center;
-
-  padding:
-    clamp(45px,8vw,85px)
-    25px;
-
-  border-radius:30px;
-
-  border:1px solid rgba(190,100,255,.25);
-
+.mindset{
   background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(137,37,255,.25),
-      transparent 50%
-    ),
-    rgba(18,8,29,.75);
-
-  box-shadow:
-    inset 0 0 100px rgba(120,25,255,.05);
+    radial-gradient(circle at 20% 50%,rgba(126,31,255,.11),transparent 28%),
+    #05030a;
 }
 
-.cta-box h2{
-  font-size:clamp(40px,6vw,75px);
+.mindset-layout{
+  display:grid;
+  grid-template-columns:.9fr 1.8fr;
+  gap:25px;
+  align-items:stretch;
+}
+
+.mindset-intro{
+  padding:25px 0;
+}
+
+.mindset-intro h2{
+  margin-top:12px;
+  font-size:clamp(36px,4vw,57px);
   line-height:1;
   letter-spacing:-.055em;
 }
 
-.cta-box p{
-  max-width:570px;
-  margin:20px auto 30px;
-
-  color:#aaa0b4;
+.mindset-intro p{
+  margin-top:20px;
+  color:var(--muted);
   line-height:1.7;
 }
 
-/* =========================================================
+.mindset-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.mind-card{
+  min-height:210px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(24,13,40,.8),rgba(7,4,13,.85));
+  padding:23px;
+  transform-style:preserve-3d;
+  transition:.35s;
+}
+
+.mind-card:hover{
+  transform:
+    perspective(800px)
+    rotateX(3deg)
+    rotateY(-3deg)
+    translateY(-5px);
+  border-color:rgba(186,76,255,.45);
+}
+
+.mind-card img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.13;
+  transition:.4s;
+}
+
+.mind-card:hover img{
+  opacity:.28;
+  transform:scale(1.08);
+}
+
+.mind-card-content{
+  position:relative;
+  z-index:2;
+}
+
+.mind-card-icon{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  overflow:hidden;
+  border:1px solid rgba(186,76,255,.45);
+  box-shadow:0 0 20px rgba(128,28,255,.18);
+}
+
+.mind-card-icon img{
+  position:static;
+  opacity:1;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.mind-card h3{
+  margin-top:18px;
+  font-size:17px;
+}
+
+.mind-card p{
+  margin-top:8px;
+  color:#99909f;
+  font-size:11px;
+  line-height:1.65;
+}
+
+/* =========================
+   FOUNDER
+========================= */
+
+.founder{
+  background:
+    radial-gradient(circle at 80% 50%,rgba(126,30,255,.13),transparent 34%),
+    #030208;
+}
+
+.founder-card{
+  position:relative;
+  min-height:650px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:30px;
+  background:
+    linear-gradient(110deg,rgba(12,7,20,.98),rgba(14,7,25,.70));
+  box-shadow:var(--shadow);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  transform-style:preserve-3d;
+}
+
+.founder-card::before{
+  content:"";
+  position:absolute;
+  width:450px;
+  height:450px;
+  left:-180px;
+  bottom:-220px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(126,29,255,.2),transparent 70%);
+  filter:blur(10px);
+}
+
+.founder-copy{
+  position:relative;
+  z-index:3;
+  padding:70px;
+}
+
+.founder-copy h2{
+  margin-top:13px;
+  font-size:clamp(42px,5vw,72px);
+  line-height:.95;
+  letter-spacing:-.06em;
+}
+
+.founder-role{
+  margin-top:15px;
+  color:#c58aff;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+.founder-copy p{
+  max-width:500px;
+  margin-top:22px;
+  color:#aaa1b2;
+  font-size:14px;
+  line-height:1.8;
+}
+
+.quote{
+  margin-top:30px;
+  padding:22px 25px;
+  border-left:2px solid #a23cff;
+  background:linear-gradient(90deg,rgba(139,37,255,.09),transparent);
+}
+
+.quote p{
+  margin:0;
+  color:#ddd4e3;
+  font-size:17px;
+  line-height:1.65;
+  font-style:italic;
+}
+
+.founder-social{
+  margin-top:25px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:#c98cff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.05em;
+}
+
+.founder-social:hover{
+  color:#fff;
+}
+
+.founder-photo{
+  position:relative;
+  align-self:stretch;
+  min-height:650px;
+  overflow:hidden;
+}
+
+.founder-photo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  background:
+    linear-gradient(90deg,#0c0714 0%,transparent 40%),
+    linear-gradient(0deg,rgba(3,2,8,.4),transparent 35%);
+  pointer-events:none;
+}
+
+.founder-photo::after{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  right:-120px;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(136,39,255,.18),transparent 67%);
+  filter:blur(15px);
+  pointer-events:none;
+}
+
+.founder-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(.9) contrast(1.05);
+  transform:scale(1.02);
+  transition:.7s;
+}
+
+.founder-card:hover .founder-photo img{
+  transform:scale(1.05);
+}
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact{
+  padding-bottom:80px;
+  background:#030208;
+}
+
+.contact-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:30px;
+  padding:55px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(133,34,255,.12),transparent 35%),
+    linear-gradient(145deg,rgba(22,11,36,.8),rgba(5,3,10,.95));
+  box-shadow:var(--shadow);
+}
+
+.contact-card::before{
+  content:"";
+  position:absolute;
+  width:400px;
+  height:400px;
+  right:-180px;
+  bottom:-220px;
+  border-radius:50%;
+  border:1px solid rgba(174,67,255,.15);
+  box-shadow:
+    0 0 60px rgba(128,30,255,.12),
+    inset 0 0 60px rgba(128,30,255,.08);
+}
+
+.contact-layout{
+  display:grid;
+  grid-template-columns:1fr 1.3fr;
+  gap:40px;
+  align-items:center;
+}
+
+.contact-copy h2{
+  margin-top:12px;
+  font-size:clamp(40px,5vw,68px);
+  line-height:.95;
+  letter-spacing:-.055em;
+}
+
+.contact-copy p{
+  margin-top:20px;
+  color:var(--muted);
+  line-height:1.75;
+}
+
+.contact-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:11px;
+  margin-top:27px;
+}
+
+.contact-items{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+}
+
+.contact-item{
+  min-height:115px;
+  padding:20px;
+  border:1px solid rgba(185,78,255,.16);
+  border-radius:19px;
+  background:rgba(255,255,255,.025);
+  transition:.3s;
+}
+
+.contact-item:hover{
+  transform:translateY(-4px);
+  border-color:rgba(190,81,255,.4);
+  background:rgba(154,48,255,.06);
+}
+
+.contact-icon{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid rgba(183,74,255,.38);
+  color:#ca8cff;
+  font-size:15px;
+}
+
+.contact-item small{
+  display:block;
+  margin-top:12px;
+  color:#7d7488;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.contact-item strong{
+  display:block;
+  margin-top:5px;
+  font-size:12px;
+  word-break:break-word;
+}
+
+/* =========================
    FOOTER
-========================================================= */
+========================= */
 
 footer{
-  border-top:1px solid rgba(255,255,255,.07);
-
-  padding:35px 6vw;
-
-  color:#776e83;
-  font-size:11px;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:32px 6vw;
+  background:#020107;
 }
 
 .footer-inner{
   width:min(1200px,100%);
   margin:auto;
-
   display:flex;
+  align-items:center;
   justify-content:space-between;
   gap:20px;
-  flex-wrap:wrap;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+.footer-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-@media(max-width:900px){
+.footer-brand img{
+  width:39px;
+  height:39px;
+  object-fit:cover;
+  border-radius:50%;
+}
 
-  .navbar{
-    padding:0 20px;
+.footer-brand span{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.22em;
+}
+
+.footer-links{
+  display:flex;
+  gap:20px;
+}
+
+.footer-links a{
+  color:#81788c;
+  font-size:10px;
+  transition:.3s;
+}
+
+.footer-links a:hover{
+  color:#c78aff;
+}
+
+.copyright{
+  color:#61596b;
+  font-size:9px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(18px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(980px,100%);
+  max-height:90vh;
+  overflow:auto;
+  position:relative;
+  border:1px solid rgba(192,82,255,.35);
+  border-radius:27px;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(126,32,255,.14),transparent 35%),
+    #07040d;
+  box-shadow:
+    0 40px 120px rgba(0,0,0,.75),
+    0 0 60px rgba(113,27,255,.12);
+  animation:modalIn .35s ease;
+}
+
+@keyframes modalIn{
+  from{
+    opacity:0;
+    transform:perspective(1000px) rotateX(8deg) scale(.94);
   }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.modal-close{
+  position:absolute;
+  top:17px;
+  right:17px;
+  z-index:5;
+  width:39px;
+  height:39px;
+  border:1px solid rgba(185,78,255,.35);
+  border-radius:50%;
+  background:rgba(0,0,0,.45);
+  color:white;
+  cursor:pointer;
+}
+
+.modal-content{
+  padding:40px;
+}
+
+.modal-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  align-items:center;
+}
+
+.modal-image{
+  height:400px;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid rgba(190,81,255,.22);
+}
+
+.modal-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.modal-content h2{
+  font-size:42px;
+  line-height:1;
+  letter-spacing:-.05em;
+}
+
+.modal-content h2 span{
+  color:#ad3cff;
+}
+
+.modal-content > p{
+  margin-top:18px;
+  color:#aaa0b3;
+  line-height:1.8;
+  font-size:13px;
+}
+
+.modal-list{
+  margin-top:24px;
+  display:grid;
+  gap:10px;
+}
+
+.modal-list div{
+  padding:12px 14px;
+  border:1px solid rgba(185,77,255,.14);
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+  color:#bcb3c4;
+  font-size:11px;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+  opacity:0;
+  transform:translateY(35px);
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
 
   .nav-links{
-    display:none;
-
-    position:absolute;
-
-    top:78px;
-    left:20px;
-    right:20px;
-
-    padding:20px;
-
-    flex-direction:column;
     gap:18px;
-
-    background:rgba(7,4,14,.96);
-    border:1px solid var(--border);
-    border-radius:18px;
   }
 
-  .nav-links.open{
-    display:flex;
-  }
-
-  .menu{
-    display:block;
+  .nav-cta{
+    display:none;
   }
 
   .hero-container{
     grid-template-columns:1fr;
-    text-align:center;
+    padding-top:70px;
   }
 
   .hero-copy{
-    order:2;
-  }
-
-  .scene{
-    order:1;
-    height:450px;
-  }
-
-  .orbit{
-    width:390px;
-    height:390px;
+    text-align:center;
   }
 
   .hero-description{
@@ -1067,114 +1427,200 @@ footer{
     justify-content:center;
   }
 
-  .service-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .about-grid{
-    grid-template-columns:1fr;
-  }
-
-  .work-grid{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:580px){
-
-  .navbar{
-    height:68px;
-  }
-
-  .logo img{
-    width:40px;
-    height:40px;
-  }
-
-  .logo-text{
-    font-size:11px;
-  }
-
-  .hero{
-    min-height:900px;
-  }
-
   .scene{
-    height:370px;
+    height:470px;
   }
 
   .orbit{
-    width:310px;
-    height:310px;
+    width:390px;
+    height:390px;
   }
 
-  .logo-3d{
-    width:270px;
+  .logo-stage{
+    width:300px;
+  }
+
+  .service-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .mindset-layout{
+    grid-template-columns:1fr;
+  }
+
+  .founder-card{
+    grid-template-columns:1fr;
+  }
+
+  .founder-copy{
+    padding:50px;
+  }
+
+  .founder-photo{
+    min-height:520px;
+    order:-1;
+  }
+
+  .contact-layout{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+
+  .navbar{
+    height:68px;
+    padding:0 5vw;
+  }
+
+  .brand img{
+    width:39px;
+    height:39px;
+  }
+
+  .brand-name{
+    font-size:11px;
+  }
+
+  .menu{
+    display:block;
+  }
+
+  .nav-links{
+    position:absolute;
+    top:68px;
+    left:5%;
+    right:5%;
+    display:none;
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:rgba(5,2,11,.96);
+    backdrop-filter:blur(20px);
+  }
+
+  .nav-links.open{
+    display:flex;
+  }
+
+  .nav-links a{
+    display:block;
+    padding:15px;
+  }
+
+  .nav-links a::after{
+    display:none;
+  }
+
+  section{
+    padding:90px 5vw;
+  }
+
+  .hero{
+    min-height:920px;
   }
 
   .hero-title{
-    font-size:55px;
+    font-size:52px;
   }
 
   .hero-description{
-    font-size:15px;
+    font-size:14px;
+  }
+
+  .scene{
+    height:390px;
+  }
+
+  .orbit{
+    width:320px;
+    height:320px;
+  }
+
+  .logo-stage{
+    width:235px;
   }
 
   .service-grid{
     grid-template-columns:1fr;
   }
 
-  .stats{
+  .service-card{
+    min-height:290px;
+  }
+
+  .work-grid{
     grid-template-columns:1fr 1fr;
+    grid-auto-rows:190px;
   }
 
-  .about-visual{
-    min-height:320px;
+  .work-card:first-child{
+    grid-column:span 2;
+    grid-row:span 1;
   }
 
-  .about-v{
-    font-size:130px;
+  .mindset-grid{
+    grid-template-columns:1fr;
   }
 
-  section{
-    padding-top:85px;
-    padding-bottom:85px;
+  .founder-card{
+    min-height:auto;
   }
-}
 
-/* =========================================================
-   REVEAL ANIMATION
-========================================================= */
+  .founder-copy{
+    padding:35px 25px;
+  }
 
-.reveal{
-  opacity:0;
-  transform:translateY(30px);
-  transition:
-    opacity .8s ease,
-    transform .8s ease;
-}
+  .founder-photo{
+    min-height:420px;
+  }
 
-.reveal.visible{
-  opacity:1;
-  transform:translateY(0);
+  .contact-card{
+    padding:30px 22px;
+  }
+
+  .contact-items{
+    grid-template-columns:1fr;
+  }
+
+  .modal-grid{
+    grid-template-columns:1fr;
+  }
+
+  .modal-content{
+    padding:25px;
+  }
+
+  .modal-image{
+    height:260px;
+  }
+
+  .modal-content h2{
+    font-size:34px;
+  }
+
+  .footer-inner{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .footer-links{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
 }
 
 @media(prefers-reduced-motion:reduce){
-
-  html{
-    scroll-behavior:auto;
-  }
-
   *,
   *::before,
   *::after{
-    animation:none!important;
-    transition:none!important;
-  }
-
-  .reveal{
-    opacity:1;
-    transform:none;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition-duration:.001ms!important;
   }
 }
 </style>
@@ -1182,93 +1628,83 @@ footer{
 
 <body>
 
-<!-- =======================================================
-     NAVBAR
-======================================================= -->
+<div class="page-glow"></div>
+<div class="noise"></div>
 
-<nav class="navbar">
+<!-- =========================
+     NAVIGATION
+========================= -->
 
-  <a href="#home" class="logo">
-    <!-- CHANGE ONLY THIS FILE NAME -->
-    <img
-      src="YOUR_LOGO_FILE_NAME_HERE"
-      alt="VELORA DIGITAL Logo"
-    >
+<header class="navbar" id="navbar">
 
-    <span class="logo-text">
-      VELORA DIGITAL
-    </span>
+  <a href="#home" class="brand">
+    <img src="velora-logo.jpeg" alt="VELORA DIGITAL">
+    <div class="brand-name">
+      VELORA
+      <span>DIGITAL</span>
+    </div>
   </a>
 
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#home">HOME</a></li>
-    <li><a href="#services">SERVICES</a></li>
-    <li><a href="#work">WORK</a></li>
-    <li><a href="#about">ABOUT</a></li>
-    <li><a href="#contact">CONTACT</a></li>
-  </ul>
+  <nav>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#founder">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-  <button
-    class="menu"
-    id="menuButton"
-    type="button"
-    aria-label="Open menu"
-  >
-    ☰
-  </button>
+  <a href="#contact" class="nav-cta">Let's Talk ↗</a>
 
-</nav>
+  <button class="menu" id="menuBtn" aria-label="Open menu">☰</button>
+
+</header>
 
 
-<!-- =======================================================
+<!-- =========================
      HERO
-======================================================= -->
+========================= -->
+
+<main>
 
 <section class="hero" id="home">
 
-  <div class="hero-background"></div>
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="grid-floor"></div>
 
-  <div class="hero-grid"></div>
-
-  <canvas id="particles"></canvas>
+  <span class="floating-orb" style="left:12%;top:23%;"></span>
+  <span class="floating-orb" style="left:78%;top:19%;animation-delay:1s;"></span>
+  <span class="floating-orb" style="left:88%;top:70%;animation-delay:2s;"></span>
 
   <div class="hero-container">
 
     <div class="hero-copy reveal">
 
-      <div class="badge">
-        <span class="badge-dot"></span>
-        DIGITAL INNOVATION STUDIO
+      <div class="kicker">
+        <span class="kicker-dot"></span>
+        Digital Presence. Elevated.
       </div>
 
       <h1 class="hero-title">
-        Digital<br>
-        <span class="gradient">
-          presence.
-        </span><br>
-        Elevated.
+        We turn ideas into
+        <span class="gradient">digital experience.</span>
       </h1>
 
       <p class="hero-description">
-        VELORA DIGITAL creates premium websites,
-        brands and immersive digital experiences
-        designed to make businesses impossible to ignore.
+        Strategy, design, technology and creativity combined into one
+        premium digital experience.
       </p>
 
       <div class="hero-buttons">
 
-        <a
-          href="#work"
-          class="btn btn-primary"
-        >
-          EXPLORE OUR WORK ↗
+        <a href="#work" class="btn btn-primary">
+          Explore Our Work ↗
         </a>
 
-        <a
-          href="#contact"
-          class="btn btn-secondary"
-        >
-          START A PROJECT
+        <a href="#services" class="btn btn-secondary">
+          ◈ Our Services
         </a>
 
       </div>
@@ -1276,159 +1712,156 @@ footer{
     </div>
 
 
-    <!-- ===================================================
-         3D LOGO STAGE
-    ==================================================== -->
-
-    <div
-      class="scene reveal"
-      id="scene"
-    >
+    <div class="scene reveal" id="heroScene">
 
       <div class="orbit">
-
-        <span
-          class="orbit-point"
-          style="top:0;left:50%;"
-        ></span>
-
-        <span
-          class="orbit-point"
-          style="bottom:8%;right:13%;"
-        ></span>
-
-        <span
-          class="orbit-point"
-          style="top:30%;left:4%;"
-        ></span>
-
+        <span class="orbit-point one"></span>
+        <span class="orbit-point two"></span>
+        <span class="orbit-point three"></span>
+        <span class="orbit-point four"></span>
       </div>
 
-      <div
-        class="logo-3d"
-        id="logo3D"
-      >
-
-        <!-- SAME LOGO FILE -->
-        <img
-          src="YOUR_LOGO_FILE_NAME_HERE"
-          alt="VELORA DIGITAL"
-        >
-
+      <div class="logo-stage" id="logoStage">
+        <img src="velora-hero-v.jpg" alt="VELORA 3D">
         <div class="scan-line"></div>
-
       </div>
 
     </div>
 
   </div>
 
-
   <div class="scroll-indicator">
-    <span>SCROLL TO EXPLORE</span>
+    <span>Scroll to explore</span>
     <span class="scroll-line"></span>
   </div>
 
 </section>
 
 
-<!-- =======================================================
+<!-- =========================
      SERVICES
-======================================================= -->
+========================= -->
 
-<section
-  class="services"
-  id="services"
->
+<section class="services" id="services">
 
   <div class="section-container">
 
-    <div class="reveal">
-
-      <div class="section-kicker">
-        WHAT WE DO
-      </div>
+    <div class="section-head reveal">
+      <div class="section-kicker">What We Do</div>
 
       <h2 class="section-title">
         We turn ideas into
-        <span class="gradient">
-          digital experiences.
-        </span>
+        <span class="gradient">digital experience.</span>
       </h2>
 
       <p class="section-description">
-        Strategy, design, technology and creativity
-        combined into one premium digital experience.
+        Premium digital solutions designed to make brands stronger,
+        smarter and impossible to ignore.
       </p>
-
     </div>
 
 
     <div class="service-grid">
 
-      <article class="service-card reveal">
-        <span class="service-number">01 / WEB</span>
-        <div class="service-icon">◈</div>
-        <h3>Web Development</h3>
-        <p>
-          High-performance websites built around
-          your brand, customers and business goals.
-        </p>
+      <article class="service-card reveal" data-service="web">
+
+        <div class="service-image">
+          <img src="velora-web-development.jpeg" alt="Web Development">
+        </div>
+
+        <div class="service-arrow">↗</div>
+
+        <div class="service-content">
+          <div class="service-number">01</div>
+          <h3>Web Development</h3>
+          <p>Fast, responsive and immersive digital experiences.</p>
+        </div>
+
       </article>
 
 
-      <article class="service-card reveal">
-        <span class="service-number">02 / BRAND</span>
-        <div class="service-icon">✦</div>
-        <h3>Brand Identity</h3>
-        <p>
-          Premium visual identities that make your
-          business recognizable and memorable.
-        </p>
+      <article class="service-card reveal" data-service="brand">
+
+        <div class="service-image">
+          <img src="velora-logo.jpeg" alt="Brand Identity">
+        </div>
+
+        <div class="service-arrow">↗</div>
+
+        <div class="service-content">
+          <div class="service-number">02</div>
+          <h3>Brand Identity</h3>
+          <p>Distinct visual systems built around your brand.</p>
+        </div>
+
       </article>
 
 
-      <article class="service-card reveal">
-        <span class="service-number">03 / 3D</span>
-        <div class="service-icon">◇</div>
-        <h3>3D Experiences</h3>
-        <p>
-          Immersive websites, motion and interactive
-          experiences that stand apart.
-        </p>
+      <article class="service-card reveal" data-service="3d">
+
+        <div class="service-image">
+          <img src="velora-3d-experience.jpeg" alt="3D Experience">
+        </div>
+
+        <div class="service-arrow">↗</div>
+
+        <div class="service-content">
+          <div class="service-number">03</div>
+          <h3>3D Experience</h3>
+          <p>Immersive interfaces that feel alive and dimensional.</p>
+        </div>
+
       </article>
 
 
-      <article class="service-card reveal">
-        <span class="service-number">04 / AI</span>
-        <div class="service-icon">⌁</div>
-        <h3>AI Solutions</h3>
-        <p>
-          Intelligent digital experiences designed
-          to improve modern business workflows.
-        </p>
+      <article class="service-card reveal" data-service="ai">
+
+        <div class="service-image">
+          <img src="velora-ai-solutions.jpeg" alt="AI Solutions">
+        </div>
+
+        <div class="service-arrow">↗</div>
+
+        <div class="service-content">
+          <div class="service-number">04</div>
+          <h3>AI Solutions</h3>
+          <p>Intelligent digital systems designed for what's next.</p>
+        </div>
+
       </article>
 
 
-      <article class="service-card reveal">
-        <span class="service-number">05 / E-COMMERCE</span>
-        <div class="service-icon">▣</div>
-        <h3>E-Commerce</h3>
-        <p>
-          Modern online stores designed to create
-          trust and turn visitors into customers.
-        </p>
+      <article class="service-card reveal" data-service="ecommerce">
+
+        <div class="service-image">
+          <img src="velora-ecommerce.jpeg" alt="E-Commerce">
+        </div>
+
+        <div class="service-arrow">↗</div>
+
+        <div class="service-content">
+          <div class="service-number">05</div>
+          <h3>E-Commerce</h3>
+          <p>Premium commerce experiences built to convert.</p>
+        </div>
+
       </article>
 
 
-      <article class="service-card reveal">
-        <span class="service-number">06 / DIGITAL</span>
-        <div class="service-icon">∞</div>
-        <h3>Digital Strategy</h3>
-        <p>
-          Clear digital direction connecting your
-          brand, technology, content and audience.
-        </p>
+      <article class="service-card reveal" data-service="strategy">
+
+        <div class="service-image">
+          <img src="velora-digital-strategy.jpeg" alt="Digital Strategy">
+        </div>
+
+        <div class="service-arrow">↗</div>
+
+        <div class="service-content">
+          <div class="service-number">06</div>
+          <h3>Digital Strategy</h3>
+          <p>Clear digital direction from concept to execution.</p>
+        </div>
+
       </article>
 
     </div>
@@ -1438,177 +1871,81 @@ footer{
 </section>
 
 
-<!-- =======================================================
-     ABOUT
-======================================================= -->
-
-<section
-  class="about"
-  id="about"
->
-
-  <div class="section-container about-grid">
-
-    <div class="reveal">
-
-      <div class="section-kicker">
-        THE VELORA MINDSET
-      </div>
-
-      <h2 class="section-title">
-        Not just another
-        <span class="gradient">
-          digital agency.
-        </span>
-      </h2>
-
-      <p class="section-description">
-        Every business deserves a digital identity
-        that feels as ambitious as the people behind it.
-        VELORA DIGITAL combines premium aesthetics
-        with useful technology.
-      </p>
-
-
-      <div class="stats">
-
-        <div class="stat">
-          <strong>01</strong>
-          <span>IDEA → EXPERIENCE</span>
-        </div>
-
-        <div class="stat">
-          <strong>3D</strong>
-          <span>IMMERSIVE THINKING</span>
-        </div>
-
-        <div class="stat">
-          <strong>AI</strong>
-          <span>INTELLIGENT DIGITAL</span>
-        </div>
-
-        <div class="stat">
-          <strong>∞</strong>
-          <span>ROOM TO EVOLVE</span>
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="about-visual reveal">
-
-      <div class="about-v">
-        V
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =======================================================
+<!-- =========================
      WORK
-======================================================= -->
+========================= -->
 
-<section
-  class="work"
-  id="work"
->
+<section class="work" id="work">
 
   <div class="section-container">
 
-    <div class="reveal">
-
-      <div class="section-kicker">
-        OUR WORK
-      </div>
+    <div class="section-head reveal">
+      <div class="section-kicker">Explore Our Work</div>
 
       <h2 class="section-title">
         Built to be
-        <span class="gradient">
-          remembered.
-        </span>
+        <span class="gradient">remembered.</span>
       </h2>
 
       <p class="section-description">
-        A glimpse into the type of premium digital
-        experiences VELORA DIGITAL can create.
+        A glimpse into the type of premium digital experience we
+        envisage and create.
       </p>
-
     </div>
 
 
     <div class="work-grid">
 
-      <article class="project reveal">
+      <article class="work-card reveal" data-work="brand-world">
 
-        <div class="project-content">
+        <img src="velora-digital-world.jpeg" alt="Impressive Brand World">
 
-          <div class="project-label">
-            CONCEPT / 01
-          </div>
-
-          <h3>
-            Immersive Brand World
-          </h3>
-
-          <p>
-            3D-first digital experience
-          </p>
-
+        <div class="work-info">
+          <small>Concept 01</small>
+          <h3>Impressive Brand World</h3>
+          <p>Immersive brand experience.</p>
         </div>
 
       </article>
 
 
-      <div class="project-stack">
+      <article class="work-card reveal" data-work="commerce">
 
-        <article class="project project-small reveal">
+        <img src="velora-ecommerce.jpeg" alt="Premium Commerce">
 
-          <div class="project-content">
+        <div class="work-info">
+          <small>Concept 02</small>
+          <h3>Premium Commerce</h3>
+          <p>Digital commerce experience.</p>
+        </div>
 
-            <div class="project-label">
-              CONCEPT / 02
-            </div>
-
-            <h3>
-              Premium Commerce
-            </h3>
-
-            <p>
-              Conversion-focused storefront
-            </p>
-
-          </div>
-
-        </article>
+      </article>
 
 
-        <article class="project project-small reveal">
+      <article class="work-card reveal" data-work="ai-digital">
 
-          <div class="project-content">
+        <img src="velora-ai-solutions.jpeg" alt="AI Digital">
 
-            <div class="project-label">
-              CONCEPT / 03
-            </div>
+        <div class="work-info">
+          <small>Concept 03</small>
+          <h3>AI + Digital</h3>
+          <p>Intelligence meets design.</p>
+        </div>
 
-            <h3>
-              AI + Digital
-            </h3>
+      </article>
 
-            <p>
-              Intelligent business experience
-            </p>
 
-          </div>
+      <article class="work-card reveal" data-work="digital-agency">
 
-        </article>
+        <img src="velora-lr-logo-.jpeg" alt="VELORA DIGITAL">
 
-      </div>
+        <div class="work-info">
+          <small>Concept 04</small>
+          <h3>Not Just Another Digital Agency</h3>
+          <p>A different digital perspective.</p>
+        </div>
+
+      </article>
 
     </div>
 
@@ -1617,42 +1954,88 @@ footer{
 </section>
 
 
-<!-- =======================================================
-     CONTACT / CTA
-======================================================= -->
+<!-- =========================
+     MINDSET
+========================= -->
 
-<section
-  class="cta"
-  id="contact"
->
+<section class="mindset">
 
-  <div class="section-container">
+  <div class="section-container mindset-layout">
 
-    <div class="cta-box reveal">
+    <div class="mindset-intro reveal">
 
-      <div class="section-kicker">
-        LET'S CREATE
-      </div>
+      <div class="section-kicker">The VELORA Mindset</div>
 
       <h2>
-        Your next digital
-        <span class="gradient">
-          experience.
-        </span>
+        More than agency.<br>
+        We are your
+        <span class="gradient">digital growth partner.</span>
       </h2>
 
       <p>
-        Have an idea, business or brand that needs
-        a stronger digital presence?
-        Let's build something remarkable.
+        We combine strategy, design, technology and creativity
+        to create meaningful digital experiences.
       </p>
 
-      <a
-        href="mailto:YOUR_EMAIL_HERE"
-        class="btn btn-primary"
-      >
-        START A CONVERSATION ↗
-      </a>
+    </div>
+
+
+    <div class="mindset-grid">
+
+      <article class="mind-card reveal">
+        <img src="velora-digital-wave.jpeg" alt="">
+        <div class="mind-card-content">
+          <div class="mind-card-icon">
+            <img src="velora-logo.jpeg" alt="">
+          </div>
+          <h3>Idea to Experience</h3>
+          <p>
+            We turn ideas into meaningful digital experiences.
+          </p>
+        </div>
+      </article>
+
+
+      <article class="mind-card reveal">
+        <img src="velora-3d-cubes.jpeg" alt="">
+        <div class="mind-card-content">
+          <div class="mind-card-icon">
+            <img src="velora-3d-experience.jpeg" alt="">
+          </div>
+          <h3>3D Thinking</h3>
+          <p>
+            We design in 3D to create immersive interactions.
+          </p>
+        </div>
+      </article>
+
+
+      <article class="mind-card reveal">
+        <img src="velora-ai-solutions.jpeg" alt="">
+        <div class="mind-card-content">
+          <div class="mind-card-icon">
+            <img src="velora-ai-solutions.jpeg" alt="">
+          </div>
+          <h3>AI Innovation</h3>
+          <p>
+            We use AI to solve problems and unlock new opportunities.
+          </p>
+        </div>
+      </article>
+
+
+      <article class="mind-card reveal">
+        <img src="velora-digital-world.jpeg" alt="">
+        <div class="mind-card-content">
+          <div class="mind-card-icon">
+            <img src="velora-logo.jpeg" alt="">
+          </div>
+          <h3>From A to Everywhere</h3>
+          <p>
+            From concept to global presence, we're with you all the way.
+          </p>
+        </div>
+      </article>
 
     </div>
 
@@ -1661,390 +2044,661 @@ footer{
 </section>
 
 
-<!-- =======================================================
+<!-- =========================
+     FOUNDER
+========================= -->
+
+<section class="founder" id="founder">
+
+  <div class="section-container">
+
+    <div class="founder-card reveal">
+
+      <div class="founder-copy">
+
+        <div class="section-kicker">Founder</div>
+
+        <h2>
+          Aboobakker
+          <span class="gradient">Fahiz</span>
+        </h2>
+
+        <div class="founder-role">
+          Founder &amp; CEO, VELORA DIGITAL
+        </div>
+
+        <p>
+          Building digital experiences where strategy, technology,
+          design and creativity come together to create something
+          remarkable.
+        </p>
+
+        <div class="quote">
+          <p>
+            “We don't just build websites.
+            We build digital identities that drive the future.”
+          </p>
+        </div>
+
+        <a
+          class="founder-social"
+          href="https://www.instagram.com/fahiz.official"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ◎ Follow Founder on Instagram ↗
+        </a>
+
+      </div>
+
+
+      <div class="founder-photo">
+
+        <img
+          src="velora-founder.jpeg"
+          alt="Founder of VELORA DIGITAL"
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section class="contact" id="contact">
+
+  <div class="section-container">
+
+    <div class="contact-card reveal">
+
+      <div class="contact-layout">
+
+        <div class="contact-copy">
+
+          <div class="section-kicker">Your Next Digital Experience</div>
+
+          <h2>
+            Have an idea?<br>
+            Let's make it
+            <span class="gradient">remarkable.</span>
+          </h2>
+
+          <p>
+            Have any idea, business or brand that needs a stronger
+            digital presence? Let's build something exceptional.
+          </p>
+
+          <div class="contact-buttons">
+
+            <a
+              href="https://wa.me/918088590273"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary"
+            >
+              WhatsApp ↗
+            </a>
+
+            <a
+              href="tel:+918088590273"
+              class="btn btn-secondary"
+            >
+              Call Us
+            </a>
+
+          </div>
+
+        </div>
+
+
+        <div class="contact-items">
+
+          <a
+            class="contact-item"
+            href="tel:+918088590273"
+          >
+            <div class="contact-icon">⌕</div>
+            <small>Phone</small>
+            <strong>+91 8088590273</strong>
+          </a>
+
+
+          <a
+            class="contact-item"
+            href="mailto:veloradigitalco.in@gmail.com"
+          >
+            <div class="contact-icon">✉</div>
+            <small>Email</small>
+            <strong>veloradigitalco.in@gmail.com</strong>
+          </a>
+
+
+          <a
+            class="contact-item"
+            href="https://veloradigital.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="contact-icon">◈</div>
+            <small>Website</small>
+            <strong>veloradigital.co.in</strong>
+          </a>
+
+
+          <a
+            class="contact-item"
+            href="https://www.instagram.com/veloradigital.co.in"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="contact-icon">◎</div>
+            <small>Instagram</small>
+            <strong>@veloradigital.co.in</strong>
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
      FOOTER
-======================================================= -->
+========================= -->
 
 <footer>
 
   <div class="footer-inner">
 
-    <span>
-      © <span id="year"></span> VELORA DIGITAL
-    </span>
+    <a href="#home" class="footer-brand">
+      <img src="velora-logo.jpeg" alt="VELORA DIGITAL">
+      <span>VELORA DIGITAL</span>
+    </a>
 
-    <span>
-      DIGITAL PRESENCE. ELEVATED.
-    </span>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#founder">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="copyright">
+      © 2026 VELORA DIGITAL. All Rights Reserved.
+    </div>
 
   </div>
 
 </footer>
 
 
+<!-- =========================
+     UNIVERSAL MODAL
+========================= -->
+
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <button class="modal-close" id="modalClose">×</button>
+
+    <div class="modal-content">
+
+      <div class="modal-grid">
+
+        <div class="modal-image">
+          <img id="modalImage" src="" alt="">
+        </div>
+
+        <div>
+
+          <div class="section-kicker" id="modalKicker">
+            VELORA DIGITAL
+          </div>
+
+          <h2 id="modalTitle">
+            Digital <span>Experience.</span>
+          </h2>
+
+          <p id="modalDescription"></p>
+
+          <div class="modal-list" id="modalList"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
 
-/* =========================================================
-   MOBILE MENU
-========================================================= */
+/* =========================
+   NAVIGATION
+========================= */
 
-const menuButton =
-  document.getElementById("menuButton");
+const navbar = document.getElementById("navbar");
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
 
-const navLinks =
-  document.getElementById("navLinks");
+window.addEventListener("scroll",()=>{
+  navbar.classList.toggle("scrolled",window.scrollY > 30);
+});
 
-menuButton.addEventListener("click", () => {
+menuBtn.addEventListener("click",()=>{
   navLinks.classList.toggle("open");
 });
 
-document
-  .querySelectorAll(".nav-links a")
-  .forEach(link => {
+document.querySelectorAll(".nav-links a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    navLinks.classList.remove("open");
+  });
+});
 
-    link.addEventListener("click", () => {
-      navLinks.classList.remove("open");
-    });
+
+/* =========================
+   HERO 3D MOUSE EFFECT
+========================= */
+
+const heroScene = document.getElementById("heroScene");
+const logoStage = document.getElementById("logoStage");
+
+if(window.matchMedia("(pointer:fine)").matches){
+
+  heroScene.addEventListener("mousemove",(e)=>{
+
+    const rect = heroScene.getBoundingClientRect();
+
+    const x = (e.clientX - rect.left) / rect.width - .5;
+    const y = (e.clientY - rect.top) / rect.height - .5;
+
+    logoStage.style.transform =
+      `rotateX(${y * -12}deg) rotateY(${x * 16}deg) translateZ(15px)`;
 
   });
 
+  heroScene.addEventListener("mouseleave",()=>{
+    logoStage.style.transform = "";
+  });
 
-/* =========================================================
-   YEAR
-========================================================= */
-
-document.getElementById("year").textContent =
-  new Date().getFullYear();
-
-
-/* =========================================================
-   3D LOGO MOUSE / TOUCH MOVEMENT
-========================================================= */
-
-const scene =
-  document.getElementById("scene");
-
-const logo =
-  document.getElementById("logo3D");
-
-let targetX = 0;
-let targetY = 0;
-let currentX = 0;
-let currentY = 0;
-
-function updateLogo(){
-
-  currentX +=
-    (targetX - currentX) * .08;
-
-  currentY +=
-    (targetY - currentY) * .08;
-
-  logo.style.transform =
-    `
-      translateY(-5px)
-      rotateX(${currentY}deg)
-      rotateY(${currentX}deg)
-    `;
-
-  requestAnimationFrame(updateLogo);
 }
 
-updateLogo();
 
-scene.addEventListener(
-  "pointermove",
-  event => {
+/* =========================
+   REVEAL ANIMATIONS
+========================= */
 
-    const rect =
-      scene.getBoundingClientRect();
-
-    const x =
-      (event.clientX - rect.left) /
-      rect.width - .5;
-
-    const y =
-      (event.clientY - rect.top) /
-      rect.height - .5;
-
-    targetX = x * 18;
-    targetY = y * -18;
-
+const revealObserver = new IntersectionObserver(
+  entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("visible");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold:.12
   }
 );
 
-scene.addEventListener(
-  "pointerleave",
-  () => {
+document.querySelectorAll(".reveal").forEach(el=>{
+  revealObserver.observe(el);
+});
 
-    targetX = 0;
-    targetY = 0;
 
+/* =========================
+   MODAL DATA
+========================= */
+
+const serviceData = {
+
+  web:{
+    title:"Web Development.",
+    image:"velora-web-development.jpeg",
+    description:
+      "We build fast, secure and modern websites that deliver exceptional user experiences and drive results.",
+    items:[
+      "Responsive Design",
+      "Clean Development",
+      "Performance Optimisation",
+      "SEO Friendly",
+      "Modern Interactions"
+    ]
+  },
+
+  brand:{
+    title:"Brand Identity.",
+    image:"velora-logo.jpeg",
+    description:
+      "We create distinctive visual identities that make businesses recognizable, memorable and premium.",
+    items:[
+      "Visual Identity",
+      "Logo Systems",
+      "Brand Direction",
+      "Digital Guidelines",
+      "Premium Brand Experience"
+    ]
+  },
+
+  "3d":{
+    title:"3D Experience.",
+    image:"velora-3d-experience.jpeg",
+    description:
+      "We bring digital interfaces to life through dimensional visuals, immersive motion and interactive 3D experiences.",
+    items:[
+      "3D Visual Systems",
+      "Interactive Experiences",
+      "Motion Design",
+      "Immersive Interfaces",
+      "Web 3D"
+    ]
+  },
+
+  ai:{
+    title:"AI Solutions.",
+    image:"velora-ai-solutions.jpeg",
+    description:
+      "Intelligent digital solutions designed to automate, improve and unlock new possibilities for modern businesses.",
+    items:[
+      "AI Integration",
+      "Intelligent Automation",
+      "AI Interfaces",
+      "Business Intelligence",
+      "Future-ready Systems"
+    ]
+  },
+
+  ecommerce:{
+    title:"E-Commerce.",
+    image:"velora-ecommerce.jpeg",
+    description:
+      "Premium commerce experiences designed to create trust, simplify shopping and increase conversions.",
+    items:[
+      "Online Stores",
+      "Product Experiences",
+      "Conversion Design",
+      "Payment Integration",
+      "Mobile Commerce"
+    ]
+  },
+
+  strategy:{
+    title:"Digital Strategy.",
+    image:"velora-digital-strategy.jpeg",
+    description:
+      "Clear digital direction connecting business goals, creative thinking, technology and measurable execution.",
+    items:[
+      "Digital Planning",
+      "Brand Positioning",
+      "Growth Strategy",
+      "Experience Mapping",
+      "Technology Direction"
+    ]
+  }
+
+};
+
+
+const workData = {
+
+  "brand-world":{
+    title:"Impressive Brand World.",
+    image:"velora-digital-world.jpeg",
+    description:
+      "An immersive brand world connecting identity, design, technology and digital atmosphere.",
+    items:[
+      "Immersive Brand Environment",
+      "3D Visual Identity",
+      "Interactive Storytelling",
+      "Digital Atmosphere"
+    ]
+  },
+
+  commerce:{
+    title:"Premium Commerce.",
+    image:"velora-ecommerce.jpeg",
+    description:
+      "A premium commerce concept built around visual impact, usability and conversion.",
+    items:[
+      "Premium Storefront",
+      "Product Experience",
+      "Conversion-focused Design",
+      "Mobile-first Commerce"
+    ]
+  },
+
+  "ai-digital":{
+    title:"AI + Digital.",
+    image:"velora-ai-solutions.jpeg",
+    description:
+      "The combination of artificial intelligence and premium digital experience.",
+    items:[
+      "AI-powered Experiences",
+      "Smart Interfaces",
+      "Automation",
+      "Intelligent Digital Systems"
+    ]
+  },
+
+  "digital-agency":{
+    title:"Not Just Another Digital Agency.",
+    image:"velora-lr-logo-.jpeg",
+    description:
+      "VELORA DIGITAL is built around a different approach: strategy, creativity and technology working as one.",
+    items:[
+      "Strategy",
+      "Design",
+      "Technology",
+      "Creativity",
+      "Premium Execution"
+    ]
+  }
+
+};
+
+
+/* =========================
+   MODAL ENGINE
+========================= */
+
+const modal = document.getElementById("modal");
+const modalClose = document.getElementById("modalClose");
+const modalImage = document.getElementById("modalImage");
+const modalTitle = document.getElementById("modalTitle");
+const modalDescription = document.getElementById("modalDescription");
+const modalList = document.getElementById("modalList");
+
+function openModal(data){
+
+  modalImage.src = data.image;
+  modalImage.alt = data.title;
+
+  const titleParts = data.title.split(".");
+
+  modalTitle.innerHTML =
+    `${titleParts[0]}. <span>${titleParts.slice(1).join(".")}</span>`;
+
+  modalDescription.textContent = data.description;
+
+  modalList.innerHTML = data.items
+    .map(item=>`<div>◈ ${item}</div>`)
+    .join("");
+
+  modal.classList.add("show");
+  document.body.classList.add("modal-open");
+}
+
+function closeModal(){
+
+  modal.classList.remove("show");
+  document.body.classList.remove("modal-open");
+
+}
+
+document.querySelectorAll(".service-card").forEach(card=>{
+
+  card.addEventListener("click",()=>{
+
+    const key = card.dataset.service;
+    openModal(serviceData[key]);
+
+  });
+
+});
+
+
+document.querySelectorAll(".work-card").forEach(card=>{
+
+  card.addEventListener("click",()=>{
+
+    const key = card.dataset.work;
+    openModal(workData[key]);
+
+  });
+
+});
+
+
+modalClose.addEventListener("click",closeModal);
+
+modal.addEventListener("click",(e)=>{
+  if(e.target === modal){
+    closeModal();
+  }
+});
+
+document.addEventListener("keydown",(e)=>{
+  if(e.key === "Escape"){
+    closeModal();
+  }
+});
+
+
+/* =========================
+   ACTIVE NAVIGATION
+========================= */
+
+const sections = document.querySelectorAll("section[id]");
+const navigationItems = document.querySelectorAll(".nav-links a");
+
+const navObserver = new IntersectionObserver(
+  entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+
+        navigationItems.forEach(link=>{
+          link.classList.remove("active");
+
+          if(
+            link.getAttribute("href") ===
+            "#" + entry.target.id
+          ){
+            link.classList.add("active");
+          }
+
+        });
+
+      }
+    });
+  },
+  {
+    rootMargin:"-35% 0px -55% 0px"
   }
 );
 
+sections.forEach(section=>{
+  navObserver.observe(section);
+});
 
-/* =========================================================
-   SCROLL REVEAL
-========================================================= */
 
-const revealObserver =
-  new IntersectionObserver(
-    entries => {
+/* =========================
+   3D CARD TILT
+========================= */
 
-      entries.forEach(entry => {
+if(window.matchMedia("(pointer:fine)").matches){
 
-        if(entry.isIntersecting){
+  document
+    .querySelectorAll(".service-card,.work-card,.mind-card")
+    .forEach(card=>{
 
-          entry.target.classList.add("visible");
+      card.addEventListener("mousemove",(e)=>{
 
-          revealObserver.unobserve(
-            entry.target
-          );
+        const rect = card.getBoundingClientRect();
 
-        }
+        const x =
+          (e.clientX - rect.left) / rect.width - .5;
+
+        const y =
+          (e.clientY - rect.top) / rect.height - .5;
+
+        card.style.transform =
+          `perspective(900px)
+           rotateX(${y * -5}deg)
+           rotateY(${x * 6}deg)
+           translateY(-5px)`;
 
       });
 
-    },
-    {
-      threshold:.12
-    }
-  );
-
-document
-  .querySelectorAll(".reveal")
-  .forEach(element => {
-
-    revealObserver.observe(element);
-
-  });
-
-
-/* =========================================================
-   3D PARTICLE FIELD
-========================================================= */
-
-const canvas =
-  document.getElementById("particles");
-
-const ctx =
-  canvas.getContext("2d");
-
-let particles = [];
-
-let mouseX = 0;
-let mouseY = 0;
-
-function resizeCanvas(){
-
-  canvas.width =
-    window.innerWidth *
-    window.devicePixelRatio;
-
-  canvas.height =
-    window.innerHeight *
-    window.devicePixelRatio;
-
-  canvas.style.width =
-    window.innerWidth + "px";
-
-  canvas.style.height =
-    window.innerHeight + "px";
-
-  ctx.setTransform(
-    window.devicePixelRatio,
-    0,
-    0,
-    window.devicePixelRatio,
-    0,
-    0
-  );
-
-}
-
-resizeCanvas();
-
-window.addEventListener(
-  "resize",
-  resizeCanvas
-);
-
-window.addEventListener(
-  "pointermove",
-  event => {
-
-    mouseX =
-      event.clientX;
-
-    mouseY =
-      event.clientY;
-
-  }
-);
-
-function createParticles(){
-
-  particles = [];
-
-  const amount =
-    Math.min(
-      130,
-      Math.max(
-        55,
-        Math.floor(window.innerWidth / 11)
-      )
-    );
-
-  for(let i = 0; i < amount; i++){
-
-    particles.push({
-
-      x:Math.random() * window.innerWidth,
-
-      y:Math.random() * window.innerHeight,
-
-      z:Math.random() * 2 + .3,
-
-      size:Math.random() * 1.7 + .3,
-
-      speed:Math.random() * .22 + .05,
-
-      phase:Math.random() * Math.PI * 2
-
-    });
-
-  }
-
-}
-
-createParticles();
-
-function animateParticles(){
-
-  ctx.clearRect(
-    0,
-    0,
-    window.innerWidth,
-    window.innerHeight
-  );
-
-  particles.forEach(p => {
-
-    p.y -= p.speed * p.z;
-
-    p.x +=
-      Math.sin(
-        performance.now() * .0005 +
-        p.phase
-      ) * .08;
-
-    if(p.y < -10){
-
-      p.y =
-        window.innerHeight + 10;
-
-      p.x =
-        Math.random() *
-        window.innerWidth;
-
-    }
-
-    const dx =
-      p.x - mouseX;
-
-    const dy =
-      p.y - mouseY;
-
-    const distance =
-      Math.sqrt(
-        dx * dx +
-        dy * dy
-      );
-
-    let glow =
-      0;
-
-    if(distance < 180){
-
-      glow =
-        1 - distance / 180;
-
-    }
-
-    ctx.beginPath();
-
-    ctx.arc(
-      p.x,
-      p.y,
-      p.size + glow * 1.5,
-      0,
-      Math.PI * 2
-    );
-
-    ctx.fillStyle =
-      `rgba(181,95,255,${.18 + glow * .45})`;
-
-    ctx.fill();
-
-  });
-
-  requestAnimationFrame(
-    animateParticles
-  );
-
-}
-
-animateParticles();
-
-
-/* =========================================================
-   3D TILT ON SERVICE CARDS
-========================================================= */
-
-document
-  .querySelectorAll(".service-card")
-  .forEach(card => {
-
-    card.addEventListener(
-      "pointermove",
-      event => {
-
-        if(window.innerWidth < 700)
-          return;
-
-        const rect =
-          card.getBoundingClientRect();
-
-        const x =
-          (event.clientX - rect.left) /
-          rect.width - .5;
-
-        const y =
-          (event.clientY - rect.top) /
-          rect.height - .5;
-
-        card.style.transform =
-          `
-            perspective(700px)
-            rotateX(${y * -7}deg)
-            rotateY(${x * 7}deg)
-            translateY(-8px)
-          `;
-
-      }
-    );
-
-    card.addEventListener(
-      "pointerleave",
-      () => {
+      card.addEventListener("mouseleave",()=>{
 
         card.style.transform = "";
 
-      }
-    );
+      });
 
+    });
+
+}
+
+
+/* =========================
+   CONTACT LOGGING
+========================= */
+
+document.querySelectorAll('a[href^="https://wa.me"]').forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    console.log("Opening VELORA DIGITAL WhatsApp");
   });
+});
+
+document.querySelectorAll('a[href^="mailto:"]').forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    console.log("Opening VELORA DIGITAL email");
+  });
+});
+
+
+/* =========================
+   CONSOLE BRAND MESSAGE
+========================= */
+
+console.log(
+  "%cVELORA DIGITAL",
+  "font-size:28px;font-weight:900;color:#b54cff;text-shadow:0 0 20px #8b2cff;"
+);
+
+console.log(
+  "%cDigital Presence. Elevated.",
+  "font-size:13px;color:#d8b4ff;"
+);
 
 </script>
 
